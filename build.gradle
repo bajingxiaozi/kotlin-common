@@ -34,7 +34,7 @@ application {
 
 allprojects {
     version = "1.0"
-    group = 'me.youfang'
+    group = 'com.github.bajingxiaozi'
 }
 
 subprojects {
