@@ -14,6 +14,7 @@ dependencies {
 
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    implementation 'com.github.bajingxiaozi:kotlin-common:-25830afdd9-1'
 }
 
 test {
@@ -34,7 +35,7 @@ application {
 
 allprojects {
     version = "1.0"
-    group = 'com.github.bajingxiaozi'
+    group = 'com.github.bajingxiaozi.kotlin-common'
 }
 
 subprojects {
