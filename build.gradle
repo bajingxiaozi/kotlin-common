@@ -3,19 +3,18 @@ plugins {
     id 'application'
 }
 
-group = 'me.youfang'
-version = '1.0-SNAPSHOT'
-
 repositories {
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
 
 dependencies {
     // project and files
-    implementation(project("common"))
+//    implementation(project("common"))
 
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    implementation("com.github.bajingxiaozi:kotlin-common:-48e6129296-1")
 }
 
 test {
