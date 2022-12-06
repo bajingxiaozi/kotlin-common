@@ -14,7 +14,6 @@ dependencies {
 
     // test
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    implementation 'com.github.bajingxiaozi:kotlin-common:-25830afdd9-1'
 }
 
 test {
