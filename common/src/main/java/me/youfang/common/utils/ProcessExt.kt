@@ -38,7 +38,7 @@ fun readCommand(command: String): String {
 }
 
 fun exeSimple(command: String) {
-    ld("exe start ->>> $command")
+    ld("exe start->>>$command")
     val process = Runtime.getRuntime().exec(command)
     val shutdownHook = object : Thread() {
         override fun run() {
@@ -47,10 +47,16 @@ fun exeSimple(command: String) {
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
-    val output = process.inputStream.bufferedReader().readText()
-    println(output)
+    process.inputStream.bufferedReader().lines().forEach {
+        println(it)
+    }
+    process.errorStream.bufferedReader().lines().forEach {
+        println(it)
+    }
+//    println(process.inputStream.bufferedReader().readText())
+//    println(process.errorStream.bufferedReader().readText())
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
-    ld("<<<- exe end")
+    ld("<<<-exe end")
     if (process.exitValue() != 0) throw IllegalStateException("exe error: $command ")
 }
