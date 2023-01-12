@@ -3,24 +3,22 @@ package me.youfang.common.utils
 import java.io.File
 
 private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
-    ld("exe start ->>> ${commands.joinToString(" ")} ->>> $dir")
+    lds("exe ${commands.joinToString(" ")}", "$dir")
     val process = ProcessBuilder().command(*commands).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.INHERIT).directory(dir).start()
     val shutdownHook = object : Thread() {
         override fun run() {
-            ld("process still running and now stopped: ${commands.joinToString(" ")} ->>> $dir")
+            ld("process still running and now stopped: ${commands.joinToString(" ")}", "$dir")
             process.destroy()
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
-    ld("<<<- exe end")
+    lde("exe")
     if (process.exitValue() != 0) {
         if (silent) {
-            lw("exe error: ${commands.joinToString("")} ->>> $dir")
-        } else {
-            throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
-        }
+            lw("exe error ${commands.joinToString("")}", "$dir")
+        } else throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
     }
 }
 
@@ -37,12 +35,12 @@ fun readCommand(command: String): String {
     return output
 }
 
-fun exeSimple(command: String) {
-    ld("exe start->>>$command")
+fun exeSimple(command: String, silent: Boolean) {
+    lds("exe", command)
     val process = Runtime.getRuntime().exec(command)
     val shutdownHook = object : Thread() {
         override fun run() {
-            ld("process still running and now stopped: $command")
+            ld("process still running and now stopped", command)
             process.destroy()
         }
     }
@@ -53,10 +51,12 @@ fun exeSimple(command: String) {
     process.errorStream.bufferedReader().lines().forEach {
         println(it)
     }
-//    println(process.inputStream.bufferedReader().readText())
-//    println(process.errorStream.bufferedReader().readText())
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
-    ld("<<<-exe end")
-    if (process.exitValue() != 0) throw IllegalStateException("exe error: $command ")
+    lde("exe")
+    if (process.exitValue() != 0) {
+        if (silent) {
+            lw("exe error", command)
+        } else throw IllegalStateException("exe error: $command ")
+    }
 }
