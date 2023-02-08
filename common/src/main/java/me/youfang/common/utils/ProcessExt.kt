@@ -1,14 +1,14 @@
 package me.youfang.common.utils
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.File
 import java.util.*
 
+private val Process.normalExit
+    get() = exitValue() == 0
+
 private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
-    lds("exe ${commands.joinToString(" ")}", "$dir")
+    lds(commands.joinToString(" "), "$dir")
     val fixCommands: List<String> = if (commands.size > 1) commands.toList() else (StringTokenizer(commands[0]) as Enumeration<String>).toList()
     val process = ProcessBuilder().command(fixCommands).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.INHERIT).directory(dir).start()
     val shutdownHook = object : Thread() {
@@ -20,12 +20,11 @@ private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
     Runtime.getRuntime().addShutdownHook(shutdownHook)
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
-    lde("exe")
-    if (process.exitValue() != 0) {
-        if (silent) {
-            lw("exe error ${commands.joinToString("")}", "$dir")
-        } else throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
-    }
+    lde(commands.joinToString(" "))
+    if (process.normalExit) return
+    if (silent) {
+        lw("exe error ${commands.joinToString("")}", "$dir")
+    } else throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
 }
 
 fun exe(vararg commands: String) = exe(null, false, *commands)
