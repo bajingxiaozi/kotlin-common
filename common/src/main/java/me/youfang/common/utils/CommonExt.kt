@@ -6,7 +6,7 @@ fun String.toStringBuilder() = StringBuilder(this)
 
 fun input(hint: String): String {
     print("${hint}->>> ")
-    return readlnOrNull() ?: ""
+    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("should input something")
 }
 
 fun inputPassword(hint: String): CharArray {

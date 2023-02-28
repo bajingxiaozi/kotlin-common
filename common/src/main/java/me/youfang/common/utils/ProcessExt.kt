@@ -22,9 +22,8 @@ private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
     lde(commands.joinToString(" "))
     if (process.normalExit) return
-    if (silent) {
-        lw("exe error ${commands.joinToString("")}", "$dir")
-    } else throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
+    lw("exe error ${commands.joinToString(" ")}", "$dir")
+    if (!silent) throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
 }
 
 fun exe(vararg commands: String) = exe(null, false, *commands)
@@ -40,13 +39,4 @@ fun readCommand(command: String): String {
     val output = process.inputStream.bufferedReader().readText()
     process.waitFor()
     return output
-}
-
-private fun BufferedReader.print() {
-    while (true) {
-        val nextChar = read()
-        if (nextChar == -1) break
-        print(nextChar)
-    }
-    System.out.flush()
 }
