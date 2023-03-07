@@ -4,9 +4,9 @@ import java.lang.StringBuilder
 
 fun String.toStringBuilder() = StringBuilder(this)
 
-fun input(hint: String): String {
+fun inputWithCheck(hint: String): String {
     print("${hint}->>> ")
-    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("should input something")
+    return readlnOrNull()?.trim()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("should input something")
 }
 
 fun inputPassword(hint: String): CharArray {

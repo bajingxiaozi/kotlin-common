@@ -1,6 +1,5 @@
 package me.youfang.common.utils
 
-import java.io.BufferedReader
 import java.io.File
 import java.util.*
 
@@ -8,22 +7,23 @@ private val Process.normalExit
     get() = exitValue() == 0
 
 private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
-    lds(commands.joinToString(" "), "$dir")
     val fixCommands: List<String> = if (commands.size > 1) commands.toList() else (StringTokenizer(commands[0]) as Enumeration<String>).toList()
+    val commandReadable = fixCommands.joinToString(" ")
+    lds(commandReadable, "$dir")
     val process = ProcessBuilder().command(fixCommands).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.INHERIT).directory(dir).start()
     val shutdownHook = object : Thread() {
         override fun run() {
-            ld("process still running and now stopped: ${commands.joinToString(" ")}", "$dir")
+            ld("process still running and now stopped: $commandReadable", "$dir")
             process.destroy()
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
-    lde(commands.joinToString(" "))
+    lde(commandReadable)
     if (process.normalExit) return
-    lw("exe error ${commands.joinToString(" ")}", "$dir")
-    if (!silent) throw IllegalStateException("exe error: ${commands.joinToString(" ")} ->>> $dir")
+    lw("exe error $commandReadable", "$dir")
+    if (!silent) throw IllegalStateException("exe error: $commandReadable ->>> $dir")
 }
 
 fun exe(vararg commands: String) = exe(null, false, *commands)
