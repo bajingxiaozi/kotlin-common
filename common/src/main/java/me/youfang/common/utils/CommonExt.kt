@@ -1,5 +1,6 @@
 package me.youfang.common.utils
 
+import java.io.File
 import java.lang.StringBuilder
 
 fun String.toStringBuilder() = StringBuilder(this)
@@ -14,3 +15,5 @@ fun inputPassword(hint: String): CharArray {
 //    return System.console().readPassword()
     return (readlnOrNull() ?: "").toCharArray()
 }
+
+fun String.fixFilePath() = replace("/", File.separator).replace("\\", File.separator)
