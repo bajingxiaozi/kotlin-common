@@ -13,7 +13,7 @@ private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
     val process = ProcessBuilder().command(fixCommands).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.INHERIT).directory(dir).start()
     val shutdownHook = object : Thread() {
         override fun run() {
-            ld("process still running and now stopped: $commandReadable", "$dir")
+            ld("中断操作", "操作仍在执行中, 命令=$commandReadable, 目录=$dir")
             process.destroy()
         }
     }
@@ -22,8 +22,8 @@ private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
     lde(commandReadable)
     if (process.normalExit) return
-    lw("exe error $commandReadable", "$dir")
-    if (!silent) throw IllegalStateException("exe error: $commandReadable ->>> $dir")
+    lw("操作执行失败!!!", "命令=$commandReadable, 目录=$dir")
+    if (!silent) throw IllegalStateException("操作执行失败, 命令=$commandReadable, 目录=$dir")
 }
 
 fun exe(vararg commands: String) = exe(null, false, *commands)

@@ -5,6 +5,7 @@ fun ld(head: String, message: Any?) = println("$head>>> $message")
 fun lw(head: String, message: Any?) = ld(head, message)
 
 fun lds(head: String, message: Any?) {
+    println()
     println("=".repeat(100))
     ld(head, message)
     println("-".repeat(100))
@@ -12,4 +13,5 @@ fun lds(head: String, message: Any?) {
 
 fun lde(head: String) {
     println("=".repeat(40))
+    println()
 }
