@@ -1,6 +1,6 @@
 package me.youfang.common.utils
 
-fun ld(head: String, message: Any?) = println("$head>>> $message")
+fun ld(head: String, message: Any?) = println("> $head: $message")
 
 fun lw(head: String, message: Any?) = ld(head, message)
 
