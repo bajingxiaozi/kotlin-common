@@ -7,6 +7,8 @@ fun File.forceMkdir() = apply { FileUtils.forceMkdir(this) }
 
 fun String.toFile() = File(this)
 
+fun File.child(name: String) = File(this, name)
+
 private fun File.nextAvailableDir(): File {
     if (!exists()) return this
     var index = 2
