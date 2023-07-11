@@ -18,3 +18,9 @@ private fun File.nextAvailableDir(): File {
         index++
     }
 }
+
+fun String.trimToPath(): File {
+    val fixLink = this.trim { it == '"' }.trim()
+    require(fixLink.isNotBlank()) { "empty link" }
+    return FileUtils.getFile(*fixLink.split('\\', '/').filter { it.isNotEmpty() }.toTypedArray());
+}
