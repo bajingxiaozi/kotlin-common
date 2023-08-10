@@ -10,10 +10,10 @@ fun inputWithCheck(hint: String): String {
     return readlnOrNull()?.trim()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("should input something")
 }
 
-fun inputPassword(hint: String): CharArray {
+fun inputPassword(hint: String): String {
     print("${hint}->>> ")
 //    return System.console().readPassword()
-    return (readlnOrNull() ?: "").toCharArray()
+    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("should input something")
 }
 
 fun String.fixFilePath() = replace("/", File.separator).replace("\\", File.separator)

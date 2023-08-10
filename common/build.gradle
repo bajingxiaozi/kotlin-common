@@ -20,6 +20,7 @@ dependencies {
 
     // third party
     implementation("commons-io:commons-io:2.11.0")
+    implementation("org.json:json:20230618")
 }
 
 test {
