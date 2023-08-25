@@ -4,6 +4,8 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.nio.file.CopyOption
+import java.nio.file.StandardCopyOption
 import java.util.UUID
 
 fun String.writeToFile(file: File) = apply {
@@ -14,7 +16,10 @@ fun String.writeToFile(file: File) = apply {
 fun String.writeToFileWithTempFile(file: File) {
     val tempFile = File(file.parentFile, UUID.randomUUID().toString())
     writeToFile(tempFile)
-    tempFile.renameTo(file)
+    if (file.exists()) {
+        file.delete()
+    }
+    FileUtils.moveFile(tempFile, file)
 }
 
 
