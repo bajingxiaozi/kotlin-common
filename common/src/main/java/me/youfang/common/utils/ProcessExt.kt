@@ -9,11 +9,12 @@ private val Process.normalExit
 private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
     val fixCommands: List<String> = if (commands.size > 1) commands.toList() else (StringTokenizer(commands[0]) as Enumeration<String>).toList()
     val commandReadable = fixCommands.joinToString(" ")
-    lds("执行命令", "命令=${commandReadable}, 目录=$dir")
+    val logMessage = if (dir == null) "命令=${commandReadable}" else "命令=${commandReadable}, 目录=$dir"
+    lds("执行命令", logMessage)
     val process = ProcessBuilder().command(fixCommands).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.INHERIT).directory(dir).start()
     val shutdownHook = object : Thread() {
         override fun run() {
-            ld("中断操作", "操作仍在执行中, 命令=$commandReadable, 目录=$dir")
+            ld("中断操作", "操作仍在执行中, $logMessage")
             process.destroy()
         }
     }
@@ -22,8 +23,8 @@ private fun exe(dir: File?, silent: Boolean, vararg commands: String) {
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
     lde(commandReadable)
     if (process.normalExit) return
-    lw("操作执行失败!!!", "命令=$commandReadable, 目录=$dir")
-    if (!silent) throw IllegalStateException("操作执行失败, 命令=$commandReadable, 目录=$dir")
+    lw("操作执行失败!!!", logMessage)
+    if (!silent) throw IllegalStateException("操作执行失败, $logMessage")
 }
 
 fun exe(vararg commands: String) = exe(null, false, *commands)
