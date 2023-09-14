@@ -1,6 +1,5 @@
 package me.youfang.common.utils
 
-import java.io.File
 import java.lang.StringBuilder
 
 fun String.toStringBuilder() = StringBuilder(this)
@@ -16,4 +15,3 @@ fun inputPassword(hint: String): String {
     return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("should input something")
 }
 
-fun String.fixFilePath() = replace("/", File.separator).replace("\\", File.separator)

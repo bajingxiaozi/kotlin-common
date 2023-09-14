@@ -24,3 +24,5 @@ fun String.toNormalizeFile(): File {
     require(fixLink.isNotBlank()) { "empty link" }
     return FileUtils.getFile(*fixLink.split('\\', '/').filter { it.isNotEmpty() }.toTypedArray());
 }
+
+fun String.fixFilePath() = replace("/", File.separator).replace("\\", File.separator)
