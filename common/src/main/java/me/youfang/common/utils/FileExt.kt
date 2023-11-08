@@ -9,6 +9,8 @@ fun String.toFile() = File(this)
 
 fun File.child(name: String) = File(this, name)
 
+fun File.brother(name: String) = File(parentFile, name)
+
 fun File.nextAvailableFile(): File {
     if (!exists()) return this
     var index = 2
