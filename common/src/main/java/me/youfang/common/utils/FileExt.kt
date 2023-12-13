@@ -22,7 +22,7 @@ fun File.nextAvailableFile(): File {
 }
 
 fun String.toNormalizeFile(): File {
-    val fixLink = this.trim { it == '"' }.trim()
+    val fixLink = this.normalize()
     require(fixLink.isNotBlank()) { "empty link" }
     return FileUtils.getFile(*fixLink.split('\\', '/').filter { it.isNotEmpty() }.toTypedArray());
 }

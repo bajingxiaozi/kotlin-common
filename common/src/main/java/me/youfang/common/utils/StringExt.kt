@@ -18,3 +18,5 @@ fun String.containsAny(vararg str: String) = str.any { this.contains(it) }
 fun String.containsAny(strings: List<String>) = strings.any { this.contains(it) }
 
 fun String.unescapeHtml(): String = StringEscapeUtils.unescapeHtml4(this)
+
+fun String.normalize(): String = trim('"').trim()

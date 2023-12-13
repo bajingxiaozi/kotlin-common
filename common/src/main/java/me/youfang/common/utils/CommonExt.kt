@@ -1,7 +1,5 @@
 package me.youfang.common.utils
 
-import java.lang.StringBuilder
-
 fun String.toStringBuilder() = StringBuilder(this)
 
 fun inputWithCheck(hint: String): String {
@@ -15,3 +13,6 @@ fun inputPassword(hint: String): String {
     return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
+fun List<String>.containAny(vararg elements: String): Boolean = elements.any { this.contains(it) }
+
+val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
