@@ -1,5 +1,9 @@
 package me.youfang.common.utils
 
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
+
 fun String.toStringBuilder() = StringBuilder(this)
 
 fun inputWithCheck(hint: String): String {
@@ -16,3 +20,6 @@ fun inputPassword(hint: String): String {
 fun List<String>.containAny(vararg elements: String): Boolean = elements.any { this.contains(it) }
 
 val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
+
+val currentFormatTime: String
+    get() = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
