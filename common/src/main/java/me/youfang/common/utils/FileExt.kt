@@ -2,6 +2,7 @@ package me.youfang.common.utils
 
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.util.*
 
 fun File.forceMkdir() = apply { FileUtils.forceMkdir(this) }
 
@@ -30,3 +31,7 @@ fun String.toNormalizeFile(): File {
 }
 
 fun String.fixFilePath() = replace("/", File.separator).replace("\\", File.separator)
+
+fun File.randomFile() = File(this, UUID.randomUUID().toString())
+
+fun randomTempFile() = FileUtils.getTempDirectory().randomFile()
