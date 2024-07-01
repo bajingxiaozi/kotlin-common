@@ -17,7 +17,9 @@ fun inputPassword(hint: String): String {
     return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
-fun List<String>.containAny(vararg elements: String): Boolean = elements.any { this.contains(it) }
+fun String.containAny(vararg elements: String): Boolean = elements.any { contains(it) }
+
+fun List<String>.containAny(vararg elements: String): Boolean = any { it.containAny(*elements) }
 
 val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
 
