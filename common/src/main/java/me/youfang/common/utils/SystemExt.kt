@@ -1,6 +1,9 @@
 package me.youfang.common.utils
 
 import java.io.IOException
+import java.io.InputStreamReader
+
+private fun Process.inputReader() = InputStreamReader(inputStream, Charsets.UTF_8)
 
 fun exe(vararg params: String, inputCallback: (String) -> Unit) {
     println("exe: ${params.joinToString(" ")}")
@@ -11,7 +14,7 @@ fun exe(vararg params: String, inputCallback: (String) -> Unit) {
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
-    val reader = process.inputReader(Charsets.UTF_8)
+    val reader = process.inputReader()
     var line = StringBuilder()
     while (true) {
         val cInt = reader.read()
@@ -42,7 +45,7 @@ fun exe(vararg params: String): String {
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
-    val consoleOutput = process.inputReader(Charsets.UTF_8).readText()
+    val consoleOutput = process.inputReader().readText()
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
     return consoleOutput
