@@ -3,6 +3,9 @@ package me.youfang.common.utils
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 fun String.toStringBuilder() = StringBuilder(this)
 
@@ -25,3 +28,19 @@ val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
 
 val currentFormatTime: String
     get() = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
+
+@OptIn(ExperimentalContracts::class)
+inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
+    contract {
+        callsInPlace(block, InvocationKind.AT_LEAST_ONCE)
+    }
+    var count = retryCount
+    while (--count > 0) {
+        try {
+            return block()
+        } catch (ignore: Throwable) {
+            Thread.sleep(60 * 1000)
+        }
+    }
+    return block()
+}
