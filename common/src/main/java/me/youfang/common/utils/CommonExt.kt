@@ -26,8 +26,11 @@ fun List<String>.containAny(vararg elements: String): Boolean = any { it.contain
 
 val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
 
-val currentFormatTime: String
+val currentTimeReadable: String
     get() = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
+
+val currentTimeForLog:String
+    get() = SimpleDateFormat("yyyy_MM_dd__HH_mm_ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
 
 @OptIn(ExperimentalContracts::class)
 inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
