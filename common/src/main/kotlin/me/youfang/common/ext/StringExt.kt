@@ -1,4 +1,4 @@
-package me.youfang.common.utils
+package me.youfang.common.ext
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

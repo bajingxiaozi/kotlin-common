@@ -1,17 +1,12 @@
-package me.youfang.common.utils
+package me.youfang.common.ext
 
 import org.apache.commons.io.FileExistsException
 import org.apache.commons.io.FileUtils
-import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
-import java.io.OutputStream
-import java.nio.file.CopyOption
-import java.nio.file.StandardCopyOption
-import java.util.UUID
+import java.util.*
 
 fun String.writeToFile(file: File) = apply {
     FileUtils.forceMkdirParent(file)

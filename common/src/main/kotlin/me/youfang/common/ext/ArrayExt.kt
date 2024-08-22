@@ -1,4 +1,4 @@
-package me.youfang.common.utils
+package me.youfang.common.ext
 
 
 fun ByteArray.findPositionIn(array: ByteArray): Int {

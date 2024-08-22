@@ -1,4 +1,4 @@
-package me.youfang.common.utils
+package me.youfang.common.ext
 
 import org.apache.commons.io.FileUtils
 import java.io.File

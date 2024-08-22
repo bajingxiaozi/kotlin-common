@@ -1,9 +1,0 @@
-pluginManagement {
-    plugins {
-        id "org.jetbrains.kotlin.jvm" version "1.7.21"
-    }
-}
-
-rootProject.name = 'kotlin-common'
-include 'common'
-

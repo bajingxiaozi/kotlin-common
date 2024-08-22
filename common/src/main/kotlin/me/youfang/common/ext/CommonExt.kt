@@ -1,8 +1,7 @@
-package me.youfang.common.utils
+package me.youfang.common.ext
 
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
+import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
