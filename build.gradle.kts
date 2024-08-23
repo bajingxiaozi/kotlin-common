@@ -1,21 +1,13 @@
 plugins {
-    kotlin("jvm") version "2.0.0"
+    kotlin("jvm")
 }
 
-group = "me.youfang"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(18)
+    // project and files
+    implementation(project("common"))
 }

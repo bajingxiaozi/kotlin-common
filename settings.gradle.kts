@@ -1,6 +1,16 @@
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+pluginManagement {
+    plugins {
+        repositories {
+            google()
+            gradlePluginPortal()
+            mavenCentral()
+        }
+
+        kotlin("jvm").version(extra["kotlin.version"] as String)
+    }
+
 }
+
 rootProject.name = "kotlin-common"
 include("common")
 
