@@ -3,7 +3,7 @@ package me.youfang.common.ext
 import java.io.IOException
 import java.nio.charset.Charset
 
-fun exe(vararg params: String, inputCallback: (String) -> Unit) {
+fun exe(vararg params: String) {
     println("exe: ${params.joinToString(" ")}")
     val process = ProcessBuilder(*params).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.INHERIT).start()
     val shutdownHook = object : Thread() {
@@ -18,7 +18,7 @@ fun exe(vararg params: String, inputCallback: (String) -> Unit) {
     throw IOException("exe error ${process.exitValue()}: ${params.joinToString(" ")}")
 }
 
-fun exe(vararg params: String): String {
+fun readCommand(vararg params: String): String {
     println("exe: ${params.joinToString(" ")}")
     val process = ProcessBuilder(*params).redirectErrorStream(true).start()
     val shutdownHook = object : Thread() {
