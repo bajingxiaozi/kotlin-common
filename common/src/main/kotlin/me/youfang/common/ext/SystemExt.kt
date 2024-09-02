@@ -1,11 +1,6 @@
 package me.youfang.common.ext
 
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
-
-private val Process.utf8InputReader
-    get() = BufferedReader(InputStreamReader(inputStream, "utf-8"))
 
 fun exe(vararg params: String) {
     println("exe: ${params.joinToString(" ")}")
@@ -30,7 +25,7 @@ fun exe(vararg params: String, outputCallback: (String) -> Unit) {
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
-    val reader = process.utf8InputReader
+    val reader = process.inputStream.bufferedReader()
     val line = StringBuilder()
     while (true) {
         val cInt = reader.read()
@@ -59,7 +54,7 @@ fun readCommand(vararg params: String): String {
         }
     }
     Runtime.getRuntime().addShutdownHook(shutdownHook)
-    val consoleOutput = process.utf8InputReader.readText()
+    val consoleOutput = process.inputStream.bufferedReader().readText()
     process.waitFor()
     Runtime.getRuntime().removeShutdownHook(shutdownHook)
     return consoleOutput
