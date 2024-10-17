@@ -5,6 +5,7 @@ import java.util.*
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.random.Random
 
 fun String.toStringBuilder() = StringBuilder(this)
 
@@ -28,20 +29,19 @@ val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
 val currentTimeReadable: String
     get() = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
 
-val currentTimeForLog:String
+val currentTimeForLog: String
     get() = SimpleDateFormat("yyyy_MM_dd__HH_mm_ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
 
 @OptIn(ExperimentalContracts::class)
 inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
-    contract {
-        callsInPlace(block, InvocationKind.AT_LEAST_ONCE)
-    }
+    contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
     var count = retryCount
     while (--count > 0) {
         try {
             return block()
-        } catch (ignore: Throwable) {
-            Thread.sleep(60 * 1000)
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            Thread.sleep(Random.nextLong(60, 120) * 1000)
         }
     }
     return block()

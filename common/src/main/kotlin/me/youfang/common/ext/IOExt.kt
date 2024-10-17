@@ -14,7 +14,10 @@ fun String.writeToFile(file: File) = apply {
 }
 
 fun String.writeToFileWithTempFile(file: File) {
-    val tempFile = File(file.parentFile, UUID.randomUUID().toString())
+    val tempFile = File(file.parentFile, UUID.randomUUID().toString()).apply {
+        FileUtils.forceMkdirParent(this)
+        deleteOnExit()
+    }
     writeToFile(tempFile)
     if (file.exists()) {
         file.delete()
@@ -23,9 +26,10 @@ fun String.writeToFileWithTempFile(file: File) {
 }
 
 fun InputStream.writeToFileWithTempFile(file: File) {
-    if (file.exists()) throw FileExistsException("文件已存在: $file")
-    val tempFile = File(file.parentFile, UUID.randomUUID().toString())
-    FileUtils.forceMkdirParent(tempFile)
+    val tempFile = File(file.parentFile, UUID.randomUUID().toString()).apply {
+        FileUtils.forceMkdirParent(this)
+        deleteOnExit()
+    }
     FileOutputStream(tempFile).use {
         copyTo(it)
     }
