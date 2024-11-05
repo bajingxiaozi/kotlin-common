@@ -2,7 +2,7 @@ package me.youfang.common.ext
 
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.util.*
+import java.util.UUID
 
 fun File.forceMkdir() = apply { FileUtils.forceMkdir(this) }
 

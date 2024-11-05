@@ -1,7 +1,9 @@
 package me.youfang.common.ext
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.TimeZone
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -27,10 +29,14 @@ fun List<String>.containAny(vararg elements: String): Boolean = any { it.contain
 val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
 
 val currentTimeReadable: String
-    get() = SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
+    get() = newSimpleDataFormatter("yyyy年MM月dd日 HH:mm:ss").format(Date())
 
 val currentTimeForLog: String
-    get() = SimpleDateFormat("yyyy_MM_dd__HH_mm_ss").apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }.format(Date())
+    get() = newSimpleDataFormatter("yyyy_MM_dd__HH_mm_ss").format(Date())
+
+fun newSimpleDataFormatter(format: String) = SimpleDateFormat(format).apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }
+
+fun newCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"))
 
 @OptIn(ExperimentalContracts::class)
 inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
