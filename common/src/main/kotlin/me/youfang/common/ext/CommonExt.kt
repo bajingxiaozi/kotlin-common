@@ -36,7 +36,7 @@ val currentTimeForLog: String
 
 fun newSimpleDataFormatter(format: String) = SimpleDateFormat(format).apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }
 
-fun newCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"))
+fun newShanghaiCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"))
 
 @OptIn(ExperimentalContracts::class)
 inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {

@@ -17,13 +17,15 @@ fun String.containsAny(vararg str: String) = str.any { this.contains(it) }
 
 fun String.containsAny(strings: List<String>) = strings.any { this.contains(it) }
 
-fun String.startWithAny(strings:List<String>) = strings.any { startsWith(it) }
+fun String.startWithAny(strings: List<String>) = strings.any { startsWith(it) }
+
+fun String.startWithAny(vararg strings: String) = strings.any { startsWith(it) }
 
 fun String.unescapeHtml(): String = StringEscapeUtils.unescapeHtml4(this)
 
 fun String.normalize(): String = trim('"').trim()
 
-fun String.replaceFirstAny(strings:List<String>):String {
+fun String.replaceFirstAny(strings: List<String>): String {
     var s = this
     strings.forEach {
         s = s.replaceFirst(it, "")
