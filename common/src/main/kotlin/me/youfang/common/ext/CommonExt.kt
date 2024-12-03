@@ -1,5 +1,11 @@
 package me.youfang.common.ext
 
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -52,3 +58,8 @@ inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
     }
     return block()
 }
+
+val publicIP: String
+    get() = URL("http://checkip.amazonaws.com").openStream().bufferedReader().use { it.readLine() } ?: throw IOException("获取不到外网IP地址，请检查是否能正常上网")
+
+fun String.copyToClipBoard() = Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(this), null)
