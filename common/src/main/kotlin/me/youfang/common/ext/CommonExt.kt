@@ -2,9 +2,7 @@ package me.youfang.common.ext
 
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -24,8 +22,8 @@ fun inputWithCheck(hint: String): String {
 
 fun inputPassword(hint: String): String {
     print("${hint}->>> ")
-//    return System.console().readPassword()
-    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
+    return System.console().readPassword()?.takeIf { it.isNotEmpty() }?.let { String(it) } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
+//    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
 fun String.containAny(vararg elements: String): Boolean = elements.any { contains(it) }
@@ -45,7 +43,7 @@ fun newSimpleDataFormatter(format: String) = SimpleDateFormat(format).apply { ti
 fun newShanghaiCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"))
 
 @OptIn(ExperimentalContracts::class)
-inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
+inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
     contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
     var count = retryCount
     while (--count > 0) {
@@ -54,6 +52,20 @@ inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
         } catch (exception: Exception) {
             exception.printStackTrace()
             Thread.sleep(Random.nextLong(60, 120) * 1000)
+        }
+    }
+    return block()
+}
+
+@OptIn(ExperimentalContracts::class)
+inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
+    contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
+    var count = retryCount
+    while (--count > 0) {
+        try {
+            return block()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
         }
     }
     return block()
