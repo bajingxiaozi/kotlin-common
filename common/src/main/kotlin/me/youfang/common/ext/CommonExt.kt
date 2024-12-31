@@ -3,6 +3,7 @@ package me.youfang.common.ext
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.IOException
+import java.net.NetworkInterface
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -51,7 +52,7 @@ inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
             return block()
         } catch (exception: Exception) {
             exception.printStackTrace()
-            Thread.sleep(Random.nextLong(60, 120) * 1000)
+            Thread.sleep(Random.nextLong(3, 10) * 1000)
         }
     }
     return block()
@@ -75,3 +76,31 @@ val publicIP: String
     get() = URL("http://checkip.amazonaws.com").openStream().bufferedReader().use { it.readLine() } ?: throw IOException("获取不到外网IP地址，请检查是否能正常上网")
 
 fun String.copyToClipBoard() = Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(this), null)
+
+fun ByteArray.findPositionIn(array: ByteArray): Int {
+    for (i in array.indices) {
+        if (arrayMatch(array, i, this)) return i
+    }
+    return -1
+}
+
+private fun arrayMatch(source: ByteArray, position: Int, sub: ByteArray): Boolean {
+    if (position + sub.size >= source.size) return false
+    for (i in sub.indices) {
+        if (sub[i] != source[position + i]) return false
+    }
+    return true
+}
+
+fun <T> List<T>.getFromLast(index: Int) = get(size - index - 1)
+
+val mac by lazy { NetworkInterface.getNetworkInterfaces().toList().firstNotNullOf { network -> network.hardwareAddress.takeIf { it != null && it.isNotEmpty() } } }
+
+val macReadable: String
+    get() {
+        val sb = java.lang.StringBuilder()
+        for (i in mac.indices) {
+            sb.append(String.format("%02X%s", mac[i], if ((i < mac.size - 1)) "-" else ""))
+        }
+        return sb.toString()
+    }
