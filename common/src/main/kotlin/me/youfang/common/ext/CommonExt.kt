@@ -52,7 +52,7 @@ inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
             return block()
         } catch (exception: Exception) {
             exception.printStackTrace()
-            Thread.sleep(Random.nextLong(3, 10) * 1000)
+            Thread.sleep(Random.nextLong(1, 10) * 1000)
         }
     }
     return block()

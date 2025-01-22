@@ -35,3 +35,15 @@ fun String.fixFilePath() = replace("/", File.separator).replace("\\", File.separ
 fun File.randomFile() = File(this, UUID.randomUUID().toString())
 
 fun randomTempFile() = FileUtils.getTempDirectory().randomFile()
+
+fun File.deleteRecursivelyWithNewThread() {
+    if (!exists()) return
+    if (!isDirectory) return
+    val tempDir = File(parentFile, "tmp_${UUID.randomUUID()}")
+    renameTo(tempDir)
+    object : Thread() {
+        override fun run() {
+            tempDir.deleteRecursively()
+        }
+    }.start()
+}
