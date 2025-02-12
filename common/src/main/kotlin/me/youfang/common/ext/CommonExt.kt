@@ -27,7 +27,9 @@ fun inputPassword(hint: String): String {
 //    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
-fun String.containAny(vararg sub: String): Boolean = sub.any { contains(it) }
+fun String.containAny(vararg subs: String): Boolean = subs.any { contains(it) }
+
+fun String.containAny(subs: List<String>): Boolean = subs.any { contains(it) }
 
 fun List<String>.containAny(vararg subs: String): Boolean = any { it.containAny(*subs) }
 
