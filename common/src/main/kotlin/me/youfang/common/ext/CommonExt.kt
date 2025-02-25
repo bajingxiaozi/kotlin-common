@@ -1,6 +1,7 @@
 package me.youfang.common.ext
 
 import java.awt.Toolkit
+import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
 import java.io.IOException
 import java.net.NetworkInterface
@@ -33,7 +34,13 @@ fun String.containAny(subs: List<String>): Boolean = subs.any { contains(it) }
 
 fun List<String>.containAny(vararg subs: String): Boolean = any { it.containAny(*subs) }
 
-val windowsSystem: Boolean = System.getProperty("os.name").contains("Windows")
+enum class OS {
+    WINDOWS, LIUNX
+}
+
+val currentOS = if (System.getProperty("os.name").contains("Windows")) OS.WINDOWS else OS.LIUNX
+
+val currentOSIsWindows: Boolean = currentOS == OS.WINDOWS
 
 val currentTimeReadable: String
     get() = newSimpleDataFormatter("yyyy年MM月dd日 HH:mm:ss").format(Date())
@@ -52,8 +59,8 @@ inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
     while (--count > 0) {
         try {
             return block()
-        } catch (exception: Exception) {
-            exception.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
             Thread.sleep(Random.nextLong(1, 10) * 1000)
         }
     }
@@ -67,8 +74,8 @@ inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
     while (--count > 0) {
         try {
             return block()
-        } catch (exception: Exception) {
-            exception.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
     return block()
@@ -77,7 +84,13 @@ inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
 val publicIP: String
     get() = URL("http://checkip.amazonaws.com").openStream().bufferedReader().use { it.readLine() } ?: throw IOException("获取不到外网IP地址，请检查是否能正常上网")
 
-fun String.copyToClipBoard() = Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(this), null)
+fun String.copyToClipBoard() {
+    clipBoardString = this
+}
+
+var clipBoardString: String?
+    get() = Toolkit.getDefaultToolkit().systemClipboard.getData(DataFlavor.stringFlavor)?.toString()
+    set(value) = Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(value), null)
 
 fun ByteArray.findPositionIn(array: ByteArray): Int {
     for (i in array.indices) {
