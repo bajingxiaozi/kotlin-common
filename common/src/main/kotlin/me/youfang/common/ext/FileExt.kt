@@ -47,3 +47,11 @@ fun File.deleteRecursivelyWithNewThread() {
         }
     }.start()
 }
+
+fun File.deleteRecursivelyWithTempDir() {
+    if (!exists()) return
+    if (!isDirectory) return
+    val tempDir = File(parentFile, "tmp_${UUID.randomUUID()}")
+    renameTo(tempDir)
+    tempDir.deleteRecursively()
+}

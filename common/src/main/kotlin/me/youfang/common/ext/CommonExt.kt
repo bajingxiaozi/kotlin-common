@@ -28,11 +28,11 @@ fun inputPassword(hint: String): String {
 //    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
-fun String.containAny(vararg subs: String): Boolean = subs.any { contains(it) }
+fun String.anyContainSubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = anyContainSubString(subs.toList(), ignoreCase)
 
-fun String.containAny(subs: List<String>): Boolean = subs.any { contains(it) }
+fun String.anyContainSubString(subs: List<String>, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
 
-fun List<String>.containAny(vararg subs: String): Boolean = any { it.containAny(*subs) }
+fun List<String>.anyContainSubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = any { it.anyContainSubString(*subs, ignoreCase = ignoreCase) }
 
 enum class OS {
     WINDOWS, LIUNX
@@ -41,6 +41,8 @@ enum class OS {
 val currentOS = if (System.getProperty("os.name").contains("Windows")) OS.WINDOWS else OS.LIUNX
 
 val currentOSIsWindows: Boolean = currentOS == OS.WINDOWS
+
+val currentOSIsLiunx = currentOS == OS.LIUNX
 
 val currentTimeReadable: String
     get() = newSimpleDataFormatter("yyyy年MM月dd日 HH:mm:ss").format(Date())
