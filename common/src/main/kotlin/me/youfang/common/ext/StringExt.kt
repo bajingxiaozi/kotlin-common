@@ -32,3 +32,5 @@ fun String.replaceFirstAny(strings: List<String>): String {
     }
     return s
 }
+
+fun String.trimMultiLineStart() = lines().joinToString("\n") { it.trimStart() }

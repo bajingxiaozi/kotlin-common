@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 import java.util.UUID
 
+
 fun File.forceMkdir() = apply { FileUtils.forceMkdir(this) }
 
 fun File.forceMkdirParent() = apply { FileUtils.forceMkdirParent(this) }
@@ -54,4 +55,23 @@ fun File.deleteRecursivelyWithTempDir() {
     val tempDir = File(parentFile, "tmp_${UUID.randomUUID()}")
     renameTo(tempDir)
     tempDir.deleteRecursively()
+}
+
+fun File.copyRecursivelyWithTempDir(target: File) {
+    val tempDir = target.brother(UUID.randomUUID().toString())
+    copyRecursively(tempDir)
+    FileUtils.moveDirectory(tempDir, target)
+}
+
+fun File.contain(other: File): Boolean {
+    val parent = canonicalFile
+    var child: File? = other.normalize().absoluteFile
+    while (true) {
+        if (child?.exists() == true) {
+            child = child.canonicalFile
+        }
+        if (child == null) return false
+        if (child == parent) return true
+        child = child.parentFile
+    }
 }
