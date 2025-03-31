@@ -28,7 +28,7 @@ fun inputPassword(hint: String): String {
 //    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
-fun String.anyContainSubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = anyContainSubString(subs.toList(), ignoreCase)
+fun String.anyContainSubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
 
 fun String.anyContainSubString(subs: List<String>, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
 
@@ -48,7 +48,7 @@ val currentTimeReadable: String
     get() = newSimpleDataFormatter("yyyy年MM月dd日 HH:mm:ss").format(Date())
 
 val currentTimeForLog: String
-    get() = newSimpleDataFormatter("yyyy_MM_dd__HH_mm_ss").format(Date())
+    get() = newSimpleDataFormatter("yyyy.MM.dd_HH.mm.ss.SSSSSS").format(Date())
 
 fun newSimpleDataFormatter(format: String) = SimpleDateFormat(format).apply { timeZone = TimeZone.getTimeZone("Asia/Shanghai") }
 
@@ -58,7 +58,7 @@ fun newShanghaiCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone(
 inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
     contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
     var count = retryCount
-    while (--count > 0) {
+    while (--count >= 0) {
         try {
             return block()
         } catch (e: Exception) {
@@ -73,7 +73,7 @@ inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
 inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
     contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
     var count = retryCount
-    while (--count > 0) {
+    while (--count >= 0) {
         try {
             return block()
         } catch (e: Exception) {

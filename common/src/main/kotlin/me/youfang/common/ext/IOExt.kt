@@ -32,6 +32,9 @@ fun InputStream.writeToFileWithTempFile(file: File) {
     FileOutputStream(tempFile).use {
         copyTo(it)
     }
+    if (file.exists()) {
+        file.delete()
+    }
     FileUtils.moveFile(tempFile, file)
 }
 
