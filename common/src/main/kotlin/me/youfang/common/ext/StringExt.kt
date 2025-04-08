@@ -13,10 +13,6 @@ fun String.toJSONObject(): JSONObject? = kotlin.runCatching { JSONObject(this) }
 
 fun Any.toPrettyJSONString(): String = GsonBuilder().setPrettyPrinting().create().toJson(this)
 
-fun String.containsAny(vararg str: String) = str.any { this.contains(it) }
-
-fun String.containsAny(strings: List<String>) = strings.any { this.contains(it) }
-
 fun String.startWithAny(strings: List<String>) = strings.any { startsWith(it) }
 
 fun String.startWithAny(vararg strings: String) = strings.any { startsWith(it) }

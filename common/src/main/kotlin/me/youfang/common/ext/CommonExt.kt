@@ -28,11 +28,11 @@ fun inputPassword(hint: String): String {
 //    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 }
 
-fun String.anyContainSubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
+fun String.containAnySubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
 
-fun String.anyContainSubString(subs: List<String>, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
+fun String.containAnySubString(subs: List<String>, ignoreCase: Boolean = false): Boolean = subs.any { contains(it, ignoreCase) }
 
-fun List<String>.anyContainSubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = any { it.anyContainSubString(*subs, ignoreCase = ignoreCase) }
+fun List<String>.anyContainAnySubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = any { it.containAnySubString(*subs, ignoreCase = ignoreCase) }
 
 enum class OS {
     WINDOWS, LIUNX
