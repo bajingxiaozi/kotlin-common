@@ -23,6 +23,8 @@ fun inputWithCheck(hint: String): String {
 }
 
 fun inputPassword(hint: String): String {
+    // 控制台会打印访问异常，让他提前打印下
+    System.console()
     print("${hint}->>> ")
     return System.console().readPassword()?.takeIf { it.isNotEmpty() }?.let { String(it) } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")
 //    return readlnOrNull()?.takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("没有输入任何内容，请确认！！")

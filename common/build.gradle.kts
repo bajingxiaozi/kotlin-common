@@ -30,5 +30,4 @@ dependencies {
     // third party
     implementation("commons-io:commons-io:2.16.1")
     implementation("org.json:json:20231013")
-    implementation("org.apache.commons:commons-text:1.11.0")
 }

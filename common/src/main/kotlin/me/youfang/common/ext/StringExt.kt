@@ -2,7 +2,6 @@ package me.youfang.common.ext
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import org.apache.commons.text.StringEscapeUtils
 import org.json.JSONObject
 
 inline fun <reified T> String.toBean(): T? = kotlin.runCatching { Gson().fromJson(this, T::class.java) }.getOrNull()
@@ -16,8 +15,6 @@ fun Any.toPrettyJSONString(): String = GsonBuilder().setPrettyPrinting().create(
 fun String.startWithAny(strings: List<String>) = strings.any { startsWith(it) }
 
 fun String.startWithAny(vararg strings: String) = strings.any { startsWith(it) }
-
-fun String.unescapeHtml(): String = StringEscapeUtils.unescapeHtml4(this)
 
 fun String.normalize(): String = trim('"').trim()
 
