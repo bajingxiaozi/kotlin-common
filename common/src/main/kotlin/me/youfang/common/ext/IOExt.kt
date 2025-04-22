@@ -13,7 +13,7 @@ fun String.writeToFile(file: File) = apply {
 }
 
 fun String.writeToFileWithTempFile(file: File) {
-    val tempFile = File(file.parentFile, UUID.randomUUID().toString()).apply {
+    val tempFile = File(file.parentFile, "tmp_${UUID.randomUUID()}").apply {
         FileUtils.forceMkdirParent(this)
         deleteOnExit()
     }
@@ -25,7 +25,7 @@ fun String.writeToFileWithTempFile(file: File) {
 }
 
 fun InputStream.writeToFileWithTempFile(file: File) {
-    val tempFile = File(file.parentFile, UUID.randomUUID().toString()).apply {
+    val tempFile = File(file.parentFile, "tmp_${UUID.randomUUID()}").apply {
         FileUtils.forceMkdirParent(this)
         deleteOnExit()
     }
