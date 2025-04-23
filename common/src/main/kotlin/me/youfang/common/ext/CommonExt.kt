@@ -1,5 +1,6 @@
 package me.youfang.common.ext
 
+import org.apache.commons.io.FileSystem
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
@@ -36,15 +37,9 @@ fun String.containAnySubString(subs: List<String>, ignoreCase: Boolean = false):
 
 fun List<String>.anyContainAnySubString(vararg subs: String, ignoreCase: Boolean = false): Boolean = any { it.containAnySubString(*subs, ignoreCase = ignoreCase) }
 
-enum class OS {
-    WINDOWS, LIUNX
-}
+val currentOSIsWindows: Boolean = FileSystem.getCurrent() == FileSystem.WINDOWS
 
-val currentOS = if (System.getProperty("os.name").contains("Windows")) OS.WINDOWS else OS.LIUNX
-
-val currentOSIsWindows: Boolean = currentOS == OS.WINDOWS
-
-val currentOSIsLiunx = currentOS == OS.LIUNX
+val currentOSIsLiunx = FileSystem.getCurrent() == FileSystem.LINUX
 
 val currentTimeReadable: String
     get() = newSimpleDataFormatter("yyyy年MM月dd日 HH:mm:ss").format(Date())
