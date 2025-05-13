@@ -118,3 +118,33 @@ val macReadable: String
         }
         return sb.toString()
     }
+
+fun Long.formatDuration(): String {
+    val totalSecond = this / 1000
+    val totalMinute = totalSecond / 60
+    val totalHour = totalMinute / 60
+    if (totalSecond <= 0) return "0秒"
+    if (totalHour > 0) {
+        val minute = totalMinute % 60
+        val hour = totalMinute / 60
+        val stringBuilder = StringBuilder()
+        if (hour > 0) {
+            stringBuilder.append("${hour}时")
+        }
+        if (minute > 0) {
+            stringBuilder.append("${minute}分")
+        }
+        return stringBuilder.toString()
+    } else {
+        val minute = totalSecond / 60
+        val second = totalSecond % 60
+        val stringBuilder = StringBuilder()
+        if (minute > 0) {
+            stringBuilder.append("${minute}分")
+        }
+        if (second > 0) {
+            stringBuilder.append("${second}秒")
+        }
+        return stringBuilder.toString()
+    }
+}

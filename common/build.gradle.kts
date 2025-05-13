@@ -30,4 +30,5 @@ dependencies {
     // third party
     implementation("commons-io:commons-io:2.16.1")
     implementation("org.json:json:20231013")
+    implementation("org.jline:jline:3.26.3")
 }
