@@ -1,9 +1,11 @@
 package me.youfang.common.ext
 
 import org.apache.commons.io.FileSystem
+import java.awt.Robot
 import java.awt.Toolkit
 import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
+import java.awt.event.KeyEvent
 import java.io.IOException
 import java.net.NetworkInterface
 import java.net.URL
@@ -11,10 +13,11 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlin.random.Random
 
 fun String.toStringBuilder() = StringBuilder(this)
 
@@ -51,16 +54,24 @@ fun newSimpleDataFormatter(format: String) = SimpleDateFormat(format).apply { ti
 
 fun newShanghaiCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"))
 
-@OptIn(ExperimentalContracts::class)
-inline fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
-    contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
-    var count = retryCount
-    while (--count >= 0) {
+private const val FIRST_RETRY_DURATION = 0L
+private const val SECOND_RETRY_DURATION = 3 * 1000L
+private const val THIRD_RETRY_DURATION = 10 * 1000L
+
+fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
+    var count = 0
+    while (++count <= retryCount) {
         try {
             return block()
         } catch (e: Exception) {
             e.printStackTrace()
-            Thread.sleep(Random.nextLong(1, 10) * 1000)
+            Thread.sleep(
+                when (count) {
+                    1 -> FIRST_RETRY_DURATION
+                    2 -> SECOND_RETRY_DURATION
+                    else -> THIRD_RETRY_DURATION
+                }
+            )
         }
     }
     return block()
@@ -148,3 +159,20 @@ fun Long.formatDuration(): String {
         return stringBuilder.toString()
     }
 }
+
+fun emulatorUserDoSomething() {
+    runCatching {
+        Robot().apply {
+            keyPress(KeyEvent.VK_SCROLL_LOCK)
+            keyRelease(KeyEvent.VK_SCROLL_LOCK)
+            keyPress(KeyEvent.VK_SCROLL_LOCK)
+            keyRelease(KeyEvent.VK_SCROLL_LOCK)
+        }
+    }.onFailure { it.printStackTrace() }
+}
+
+fun ExecutorService.submitAndGet(runnable: Runnable): Unit {
+    submit(runnable).get()
+}
+
+fun <T> ExecutorService.submitAndGet(callable: Callable<T>): T = submit(callable).get()

@@ -40,6 +40,7 @@ class ProcessBuilderWrapper(vararg commands: String) {
         val process = ProcessBuilder().command(fixCommands).redirectErrorStream(true).apply {
             if (!readOutput) {
                 redirectOutput(ProcessBuilder.Redirect.INHERIT)
+                redirectInput(ProcessBuilder.Redirect.INHERIT)
             }
         }.directory(dir ?: generateDefaultWorkDir()).start()
         val shutdownHook = object : Thread() {
