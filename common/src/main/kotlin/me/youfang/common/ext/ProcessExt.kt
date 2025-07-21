@@ -6,6 +6,9 @@ import java.io.IOException
 import java.util.Enumeration
 import java.util.StringTokenizer
 import java.util.UUID
+import java.util.concurrent.CopyOnWriteArrayList
+
+private val runningProcesses = CopyOnWriteArrayList<Process>()
 
 private val Process.normalExit
     get() = exitValue() == 0
@@ -43,6 +46,7 @@ class ProcessBuilderWrapper(vararg commands: String) {
                 redirectInput(ProcessBuilder.Redirect.INHERIT)
             }
         }.directory(dir ?: generateDefaultWorkDir()).start()
+        runningProcesses.add(process)
         val shutdownHook = object : Thread() {
             override fun run() {
                 d("中断操作", "操作仍在执行中, $commandReadable")
@@ -82,6 +86,7 @@ class ProcessBuilderWrapper(vararg commands: String) {
             }
         }
         process.waitFor()
+        runningProcesses.remove(process)
         Runtime.getRuntime().removeShutdownHook(shutdownHook)
         if (printLog) {
             stage?.de()
