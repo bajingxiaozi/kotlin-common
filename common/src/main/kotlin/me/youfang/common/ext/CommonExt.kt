@@ -7,6 +7,7 @@ import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
 import java.io.IOException
+import java.net.HttpURLConnection
 import java.net.NetworkInterface
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -92,7 +93,13 @@ inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
 }
 
 val publicIP: String
-    get() = URL("http://checkip.amazonaws.com").openStream().bufferedReader().use { it.readLine() } ?: throw IOException("获取不到外网IP地址，请检查是否能正常上网")
+    get() {
+        val url = URL("http://checkip.amazonaws.com")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.connectTimeout = 5 * 1000
+        connection.readTimeout = 5 * 1000
+        return connection.inputStream.bufferedReader().use { it.readLine() } ?: throw IOException("获取不到外网IP地址，请检查是否能正常上网")
+    }
 
 fun String.copyToClipBoard() {
     clipBoardString = this
