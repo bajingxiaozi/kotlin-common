@@ -16,7 +16,7 @@ fun String.startWithAny(strings: List<String>) = strings.any { startsWith(it) }
 
 fun String.startWithAny(vararg strings: String) = strings.any { startsWith(it) }
 
-fun String.normalize(): String = trim('"').trim()
+fun String.trimFilePath(): String = trim('"').trim()
 
 fun String.replaceFirstAny(strings: List<String>): String {
     var s = this
