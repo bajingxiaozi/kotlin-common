@@ -149,7 +149,7 @@ fun addShutdownHook(hook: () -> Unit) {
 var generateDefaultWorkDir: () -> File? = { null }
 
 fun File.runBash(command: String) {
-    val tempMakeScriptFile = File(this, "tmp_${UUID.randomUUID()}.sh").apply {
+    val tempMakeScriptFile = File(this, ".tmp_${UUID.randomUUID()}.sh").apply {
         FileUtils.forceMkdirParent(this)
         writeText(command)
         deleteOnExit()
@@ -166,8 +166,27 @@ fun runBash(command: String) = FileUtils.getTempDirectory().runBash(command)
 
 fun runBashWithOutput(command: String) = FileUtils.getTempDirectory().runBashWithOutput(command)
 
+fun File.readRunBash(command: String): ProcessResult {
+    val tempMakeScriptFile = File(this, ".tmp_${UUID.randomUUID()}.sh").apply {
+        FileUtils.forceMkdirParent(this)
+        writeText(command)
+        deleteOnExit()
+    }
+    readCommand("chmod 777 ${tempMakeScriptFile.absolutePath}")
+    return ProcessBuilderWrapper("bash", tempMakeScriptFile.absolutePath).apply {
+        readOutput = true
+        printToScreen = false
+        printLog = false
+        silent = true
+        extraCommandReadable = command.trim()
+        this.dir = this@readRunBash
+    }.exe()
+}
+
+fun readRunBash(command: String): ProcessResult = FileUtils.getTempDirectory().readRunBash(command)
+
 fun File.runBashWithOutput(command: String): ProcessResult {
-    val tempMakeScriptFile = File(this, "tmp_${UUID.randomUUID()}.sh").apply {
+    val tempMakeScriptFile = File(this, ".tmp_${UUID.randomUUID()}.sh").apply {
         FileUtils.forceMkdirParent(this)
         writeText(command)
         deleteOnExit()

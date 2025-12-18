@@ -16,6 +16,7 @@ import java.util.Date
 import java.util.TimeZone
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.TimeUnit
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -59,7 +60,7 @@ private const val FIRST_RETRY_DURATION = 0L
 private const val SECOND_RETRY_DURATION = 3 * 1000L
 private const val THIRD_RETRY_DURATION = 10 * 1000L
 
-fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
+fun <R> requestWithRetry(retryCount: Int = 2, block: () -> R): R {
     var count = 0
     while (++count <= retryCount) {
         try {
@@ -96,8 +97,8 @@ val publicIP: String
     get() {
         val url = URL("http://checkip.amazonaws.com")
         val connection = url.openConnection() as HttpURLConnection
-        connection.connectTimeout = 5 * 1000
-        connection.readTimeout = 5 * 1000
+        connection.connectTimeout = 3 * 1000
+        connection.readTimeout = 3 * 1000
         return connection.inputStream.bufferedReader().use { it.readLine() } ?: throw IOException("获取不到外网IP地址，请检查是否能正常上网")
     }
 
@@ -178,8 +179,8 @@ fun emulatorUserDoSomething() {
     }.onFailure { it.printStackTrace() }
 }
 
-fun ExecutorService.submitAndGet(runnable: Runnable): Unit {
-    submit(runnable).get()
+fun ExecutorService.submitAndGet(timeoutMills: Long, runnable: Runnable): Unit {
+    submit(runnable).get(timeoutMills, TimeUnit.MILLISECONDS)
 }
 
 fun <T> ExecutorService.submitAndGet(callable: Callable<T>): T = submit(callable).get()
