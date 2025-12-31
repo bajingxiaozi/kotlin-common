@@ -60,9 +60,9 @@ private const val FIRST_RETRY_DURATION = 0L
 private const val SECOND_RETRY_DURATION = 3 * 1000L
 private const val THIRD_RETRY_DURATION = 10 * 1000L
 
-fun <R> requestWithRetry(retryCount: Int = 2, block: () -> R): R {
+fun <R> requestWithRetry(retryCount: Int = 3, block: () -> R): R {
     var count = 0
-    while (++count <= retryCount) {
+    while (++count < retryCount) {
         try {
             return block()
         } catch (e: Exception) {
@@ -83,7 +83,7 @@ fun <R> requestWithRetry(retryCount: Int = 2, block: () -> R): R {
 inline fun <R> runWithRetry(retryCount: Int = 3, block: () -> R): R {
     contract { callsInPlace(block, InvocationKind.AT_LEAST_ONCE) }
     var count = retryCount
-    while (--count >= 0) {
+    while (--count > 0) {
         try {
             return block()
         } catch (e: Exception) {
