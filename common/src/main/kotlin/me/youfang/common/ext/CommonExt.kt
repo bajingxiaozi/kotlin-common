@@ -56,7 +56,7 @@ fun newSimpleDataFormatter(format: String) = SimpleDateFormat(format).apply { ti
 
 fun newShanghaiCalendar(): Calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"))
 
-private const val FIRST_RETRY_DURATION = 0L
+private const val FIRST_RETRY_DURATION = 1 * 1000L
 private const val SECOND_RETRY_DURATION = 3 * 1000L
 private const val THIRD_RETRY_DURATION = 10 * 1000L
 

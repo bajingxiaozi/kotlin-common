@@ -160,6 +160,7 @@ fun File.runBash(command: String) {
         extraCommandReadable = command.trim()
         this.dir = this@runBash
     }.exe()
+    tempMakeScriptFile.delete()
 }
 
 fun runBash(command: String) = FileUtils.getTempDirectory().runBash(command)
@@ -173,7 +174,7 @@ fun File.readRunBash(command: String): ProcessResult {
         deleteOnExit()
     }
     readCommand("chmod 777 ${tempMakeScriptFile.absolutePath}")
-    return ProcessBuilderWrapper("bash", tempMakeScriptFile.absolutePath).apply {
+    val result = ProcessBuilderWrapper("bash", tempMakeScriptFile.absolutePath).apply {
         readOutput = true
         printToScreen = false
         printLog = false
@@ -181,6 +182,8 @@ fun File.readRunBash(command: String): ProcessResult {
         extraCommandReadable = command.trim()
         this.dir = this@readRunBash
     }.exe()
+    tempMakeScriptFile.delete()
+    return result
 }
 
 fun readRunBash(command: String): ProcessResult = FileUtils.getTempDirectory().readRunBash(command)
@@ -192,7 +195,7 @@ fun File.runBashWithOutput(command: String): ProcessResult {
         deleteOnExit()
     }
     readCommand("chmod 777 ${tempMakeScriptFile.absolutePath}")
-    return ProcessBuilderWrapper("bash", tempMakeScriptFile.absolutePath).apply {
+    val result = ProcessBuilderWrapper("bash", tempMakeScriptFile.absolutePath).apply {
         readOutput = true
         printToScreen = true
         printLog = true
@@ -200,6 +203,8 @@ fun File.runBashWithOutput(command: String): ProcessResult {
         extraCommandReadable = command.trim()
         this.dir = this@runBashWithOutput
     }.exe()
+    tempMakeScriptFile.delete()
+    return result
 }
 
 data class ProcessResult(

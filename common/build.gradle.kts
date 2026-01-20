@@ -9,9 +9,6 @@ repositories {
     mavenCentral()
 }
 
-//tasks.withType<KotlinCompile> {
-//    kotlinOptions.jvmTarget = "1.8"
-//}
 tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_1_8)
