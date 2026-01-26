@@ -13,6 +13,15 @@ private val runningProcesses = CopyOnWriteArrayList<Process>()
 private val Process.normalExit
     get() = exitValue() == 0
 
+fun Process.destroyDescendants() {
+    toHandle().destroyDescendants()
+}
+
+fun ProcessHandle.destroyDescendants() {
+    descendants().forEach { it.destroyForcibly() }
+    destroyForcibly()
+}
+
 class ProcessBuilderWrapper(vararg commands: String) {
 
     var dir: File? = null
@@ -50,7 +59,7 @@ class ProcessBuilderWrapper(vararg commands: String) {
         val shutdownHook = object : Thread() {
             override fun run() {
                 d("中断操作", "操作仍在执行中, $commandReadable")
-                process.destroy()
+                process.destroyDescendants()
             }
         }
         Runtime.getRuntime().addShutdownHook(shutdownHook)
