@@ -2,7 +2,7 @@ package me.youfang.common.ext
 
 import org.apache.commons.io.FileUtils
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 
 fun File.forceMkdir() = apply { FileUtils.forceMkdir(this) }
@@ -19,7 +19,7 @@ fun File.nextAvailableFile(): File {
     if (!exists()) return this
     var index = 2
     while (true) {
-        val file = if (extension.isEmpty()) File(parentFile, "${name}_${index}") else File(parentFile, "${nameWithoutExtension}_${index}.${extension}")
+        val file = if (isDirectory || extension.isEmpty()) File(parentFile, "${name}_${index}") else File(parentFile, "${nameWithoutExtension}_${index}.${extension}")
         if (!file.exists()) return file
         index++
     }
