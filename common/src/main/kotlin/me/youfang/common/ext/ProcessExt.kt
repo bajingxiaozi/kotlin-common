@@ -23,6 +23,9 @@ fun ProcessHandle.destroyDescendants() {
 }
 
 class ProcessBuilderWrapper(vararg commands: String) {
+    private var process: Process? = null
+    @Volatile
+    private var hasForceKill = false
 
     var dir: File? = null
     var silent = false
@@ -44,6 +47,11 @@ class ProcessBuilderWrapper(vararg commands: String) {
         stringBuilder.toString()
     }
 
+    fun destroy() {
+        hasForceKill = true
+        process?.destroyDescendants()
+    }
+
     fun exe(): ProcessResult {
         var stage: LogStage? = null
         if (printLog) {
@@ -55,6 +63,7 @@ class ProcessBuilderWrapper(vararg commands: String) {
                 redirectInput(ProcessBuilder.Redirect.INHERIT)
             }
         }.directory(dir ?: generateDefaultWorkDir()).start()
+        this.process = process
         runningProcesses.add(process)
         val shutdownHook = object : Thread() {
             override fun run() {
@@ -100,7 +109,7 @@ class ProcessBuilderWrapper(vararg commands: String) {
         if (printLog) {
             stage?.de()
         }
-        if (process.normalExit) return ProcessResult(true, output)
+        if (!hasForceKill && process.normalExit) return ProcessResult(true, output)
         if (printLog) {
             w("操作执行失败!!!", commandReadable)
         }
