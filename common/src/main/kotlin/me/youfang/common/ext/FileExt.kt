@@ -2,6 +2,11 @@ package me.youfang.common.ext
 
 import org.apache.commons.io.FileUtils
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.attribute.BasicFileAttributeView
+import java.nio.file.attribute.DosFileAttributeView
+import java.nio.file.attribute.FileTime
 import java.util.*
 
 
@@ -63,6 +68,10 @@ fun File.copyRecursivelyWithTempDir(target: File) {
     FileUtils.moveDirectory(tempDir, target)
 }
 
+fun File.setHidden() {
+    Files.getFileAttributeView(toPath(), DosFileAttributeView::class.java).setHidden(true)
+}
+
 fun File.contain(other: File): Boolean {
     val parent = canonicalFile
     var child: File? = other.normalize().absoluteFile
@@ -74,4 +83,20 @@ fun File.contain(other: File): Boolean {
         if (child == parent) return true
         child = child.parentFile
     }
+}
+
+fun modifyFolderCreationTime(file: File, millis: Long) = modifyFolderCreationTime(file.toPath(), millis)
+
+fun modifyFolderCreationTime(path: Path, millis: Long) {
+    // 将 LocalDateTime 转换为 FileTime
+    val fileTime = FileTime.fromMillis(millis)
+
+    // 获取基础属性视图
+    val view = Files.getFileAttributeView(path, BasicFileAttributeView::class.java)
+
+    /*
+     * setTimes(lastModifiedTime, lastAccessTime, createTime)
+     * 如果不需要修改某个属性，可以传 null
+     */
+    view.setTimes(null, null, fileTime)
 }
