@@ -24,6 +24,7 @@ fun ProcessHandle.destroyDescendants() {
 
 class ProcessBuilderWrapper(vararg commands: String) {
     private var process: Process? = null
+
     @Volatile
     private var hasForceKill = false
 
@@ -80,7 +81,9 @@ class ProcessBuilderWrapper(vararg commands: String) {
                 val cInt = reader.read()
                 if (cInt == -1) {
                     val s = line.toString()
-                    outputCallback(s)
+                    if (!hasForceKill) {
+                        outputCallback(s)
+                    }
                     output.add(s)
                     if (printToScreen) {
                         print(s)
@@ -91,7 +94,9 @@ class ProcessBuilderWrapper(vararg commands: String) {
                 val c = cInt.toChar()
                 if (c == '\r' || c == '\n') {
                     val s = line.toString()
-                    outputCallback(s)
+                    if (!hasForceKill) {
+                        outputCallback(s)
+                    }
                     output.add(s)
                     if (printToScreen) {
                         print(s)
